@@ -113,7 +113,7 @@ const SideDrawer = () => {
                     sx={{
                       color: channel.status ? "#ff0000" : "#f1f1f1",
                       fontSize: channel.status ? "14px" : "13px",
-                      fontWeight: channel.status ? "800" : "400",
+                      fontWeight: channel.status ? "600" : "400",
                       marginTop: "-15px",
                       paddingLeft: "5px",
                     }}
@@ -183,9 +183,9 @@ const SideDrawer = () => {
                   </div>
                   <Typography
                     sx={{
-                      color: channel.status ? "red" : "#f1f1f1",
+                      color: channel.status ? "#ff0000" : "#f1f1f1",
                       fontSize: channel.status ? "14px" : "13px",
-                      fontWeight: channel.status ? "800" : "400",
+                      fontWeight: channel.status ? "600" : "400",
                       marginTop: "-15px",
                       paddingLeft: "5px",
                     }}
