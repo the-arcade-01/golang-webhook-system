@@ -12,6 +12,7 @@ const theme = createTheme({
 
 /*
 purple : #6441a5
+purple pink : #bf94ff
 light purple : #b9a3e3
 black : #262626
 extraBlack : #202020

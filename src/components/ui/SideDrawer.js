@@ -10,7 +10,7 @@ import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
 import TextField from "@mui/material/TextField";
 
-import { followedChannels, recommendedChannels } from "../utils/SideDrawer";
+import { followedChannels, recommendedChannels } from "../../utils/SideDrawer";
 
 const drawerWidth = 240;
 
