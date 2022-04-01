@@ -14,6 +14,7 @@ const theme = createTheme({
 purple : #6441a5
 light purple : #b9a3e3
 black : #262626
+extraBlack : #202020
 grey : "hsla(0,0%,100%,0.2)"
 white : #f1f1f1
 */

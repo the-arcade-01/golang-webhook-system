@@ -13,9 +13,11 @@ const Header = () => {
       <AppBar
         sx={{
           height: 50,
-          position: "static",
+          position: "fixed",
+          zIndex: (theme) => theme.zIndex.drawer + 1,
           justifyContent: "center",
-          backgroundColor: "#262626",
+          backgroundColor: "#202020",
+          color: "#f1f1f1",
         }}
       >
         <Toolbar
@@ -31,17 +33,17 @@ const Header = () => {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              gap: 20,
+              gap: 18,
             }}
           >
             <img
               src="images/twitch_logo.svg"
               alt="twitch_logo"
-              style={{ height: 30, width: 30 }}
+              style={{ height: 30, width: 30, cursor: "pointer" }}
             />
             <Typography
-              variant="subtitle2"
               sx={{
+                fontSize: "13.5px",
                 fontWeight: "600",
                 "&:hover": {
                   color: "#b9a3e3",
@@ -52,8 +54,8 @@ const Header = () => {
               Following
             </Typography>
             <Typography
-              variant="subtitle2"
               sx={{
+                fontSize: "13.5px",
                 fontWeight: "600",
                 "&:hover": {
                   color: "#b9a3e3",
@@ -173,9 +175,11 @@ const Header = () => {
                 height: 30,
                 width: 30,
                 backgroundColor: "#4169E1",
-                border: "2px solid #6441a5",
+                cursor: "pointer",
               }}
-            />
+            >
+              <i className="fi fi-br-user" />
+            </Avatar>
           </div>
         </Toolbar>
       </AppBar>
