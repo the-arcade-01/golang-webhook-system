@@ -1,15 +1,24 @@
 package main
 
-import "fmt"
+import (
+	"context"
+	"log"
+	"net/http"
+	"os"
+
+	"github.com/joho/godotenv"
+)
 
 func main() {
-	fmt.Println("hello, event consumer")
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatalf("error loading .env file, %s", err)
+	}
+
+	db := NewEventsDB()
+	client := NewKafkaClient(os.Getenv("KAFKA_ADDR"), os.Getenv("KAFKA_TOPIC"), os.Getenv("KAFKA_GROUP_ID"), db)
+	go client.ConsumeEvents(context.Background())
+
+	log.Println("event consumer running on port:8082")
+	http.ListenAndServe(":8082", nil)
 }
-
-/*
-Get events from kafka, process them and puts them into Events DB,
-also have logic for already processed events using event_id & timestamp check
-also have out-of-orders events problem handling.
-
-Intentionally fails some events so that they are moved back to kafka and then to DLQ.
-*/

@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"time"
 )
 
 /** WebhookStatus
@@ -102,6 +103,19 @@ func (t *WebhookEventTypes) UnmarshalJSON(data []byte) error {
 		return errors.New("invalid enum type for WebhookEventTypes")
 	}
 	return nil
+}
+
+// Event represents a webhook event.
+type Event struct {
+	EventID   string            `json:"event_id"`
+	EventType WebhookEventTypes `json:"event_type"`
+	Timestamp time.Time         `json:"timestamp"`
+	Data      EventData         `json:"data"`
+}
+
+// EventData holds additional event data.
+type EventData struct {
+	InvoiceID string `json:"invoice_id"`
 }
 
 type WebhookRegisterBody struct {

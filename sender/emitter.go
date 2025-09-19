@@ -18,19 +18,6 @@ type HTTPClientInterface interface {
 	Do(*http.Request) (*http.Response, error)
 }
 
-// Event represents a webhook event.
-type Event struct {
-	EventID   string            `json:"event_id"`
-	EventType WebhookEventTypes `json:"event_type"`
-	Timestamp time.Time         `json:"timestamp"`
-	Data      EventData         `json:"data"`
-}
-
-// EventData holds additional event data.
-type EventData struct {
-	InvoiceID string `json:"invoice_id"`
-}
-
 type Job struct {
 	Ticker         *time.Ticker
 	Quit           chan struct{}
@@ -50,6 +37,7 @@ type Emitter struct {
 
 func NewEmitter(db *WebhookDB, client HTTPClientInterface, cron int) *Emitter {
 	return &Emitter{
+		jobs:     make(map[string]*Job),
 		db:       db,
 		interval: cron,
 		client:   client,

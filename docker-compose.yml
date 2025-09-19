@@ -52,6 +52,15 @@ services:
       timeout: 5s
       retries: 5
 
+  nginx:
+    image: nginx:alpine
+    depends_on:
+      - webhook_handler
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./webhook_handler/nginx.conf:/etc/nginx/nginx.conf:ro
+
   sender:
     build:
       context: .
@@ -63,6 +72,34 @@ services:
       - ./.env
     ports:
       - "8080:8080"
+
+  webhook_handler:
+    build:
+      context: .
+      dockerfile: webhook_handler/Dockerfile
+    depends_on:
+      kafka:
+        condition: service_healthy
+    deploy:
+      replicas: 3
+    env_file:
+      - ./.env
+    expose:
+      - "8081"
+
+  event_consumer:
+    build:
+      context: .
+      dockerfile: event_consumer/Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    env_file:
+      - ./.env
+    ports:
+      - "8082:8082"
 
 volumes:
   postgres_data:

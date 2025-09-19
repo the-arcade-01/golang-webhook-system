@@ -1,21 +1,30 @@
 package main
 
-import "fmt"
+import (
+	"log"
+	"net/http"
+	"os"
+
+	"github.com/joho/godotenv"
+	"golang.org/x/time/rate"
+)
 
 func main() {
-	fmt.Println("Hello, Webhook handler")
-}
+	if err := godotenv.Load(); err != nil {
+		log.Fatalf("No .env file found or couldn't load it: %v", err)
+	}
 
-/* TODO
-1. API to receive the events
-POST /webhook
-Header: x-webhook-signature (hmac check middleware verification)
-Body:
-{
-	event_id, event_type, timestamp, data: {invoice_id ...}
-}
-Response: after sending the event to kafka, send ACK back 200 status
-if payload invalid send 400 back,
-Also have Rate limit set to the API use proxy pattern before the service layer and after handler.
+	limiter := rate.NewLimiter(5, 10)
+	client := NewKafkaClient(os.Getenv("KAFKA_ADDR"), os.Getenv("KAFKA_TOPIC"))
+	handler := NewHandler(client)
 
-*/
+	http.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) { w.WriteHeader(http.StatusOK) })
+	http.Handle("/webhook", ChainMiddleware(
+		http.HandlerFunc(handler.RequestHandler),
+		authMiddleware,
+		func(h http.Handler) http.Handler { return rateLimitMiddleware(h, limiter) },
+	))
+
+	log.Println("webhook handler running on server :8081")
+	http.ListenAndServe(":8081", nil)
+}
